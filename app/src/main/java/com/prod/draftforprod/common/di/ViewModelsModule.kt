@@ -1,4 +1,4 @@
-package com.prod.draftforprod.di
+package com.prod.draftforprod.common.di
 
 import org.koin.dsl.module
 

@@ -1,4 +1,4 @@
-package com.prod.draftforprod.ui.navigation
+package com.prod.draftforprod.presentation.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -6,13 +6,14 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun AppNavBar(
+fun BottomNavBar(
     navController: NavHostController,
     destinations: List<BottomNavItem>
 ) {
@@ -21,7 +22,7 @@ fun AppNavBar(
         val currentDestination = navBackStackEntry?.destination
 
         destinations.forEach { destination ->
-            val isSelected = currentDestination?.hierarchy?.any { it.route == destination.route } == true
+            val isSelected: Boolean = currentDestination?.hasRoute(destination.route) ?: false
 
             NavigationBarItem(
                 selected = isSelected, 
@@ -36,7 +37,7 @@ fun AppNavBar(
                 },
                 icon = {
                     Icon(
-                        imageVector = if (isSelected) destination.selectedIcon else destination.unselectedIcon,
+                        painter = painterResource(if (isSelected) destination.selectedIconRes else destination.unselectedIconRes),
                         contentDescription = stringResource(id = destination.labelRes)
                     )
                 },

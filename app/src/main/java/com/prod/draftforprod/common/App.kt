@@ -1,20 +1,22 @@
-package com.prod.draftforprod.di
+package com.prod.draftforprod.common
 
 import android.app.Application
-import androidx.compose.runtime.Composable
-import com.prod.draftforprod.ui.screens.MainScreen
+import com.prod.draftforprod.common.di.commonModule
+import com.prod.draftforprod.common.di.networkModule
+import com.prod.draftforprod.common.di.repositoryModule
+import com.prod.draftforprod.common.di.roomModule
+import com.prod.draftforprod.common.di.useCaseModule
+import com.prod.draftforprod.common.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.compose.KoinContext
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 
 val appModule = listOf(
     networkModule,
     repositoryModule,
     useCaseModule,
     roomModule,
-    viewModelModule
+    viewModelModule,
+    commonModule
 )
 
 class MyApp : Application() {
@@ -25,12 +27,5 @@ class MyApp : Application() {
             androidContext(this@MyApp)
             modules(appModule)
         }
-    }
-}
-
-@Composable
-fun App() {
-    KoinContext {
-        MainScreen()
     }
 }
