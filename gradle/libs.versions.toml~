@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-coil = "3.0.4"
+coil = "2.7.0"
 converterGson = "2.11.0"
 gson = "2.11.0"
 koinBom = "4.0.1"
@@ -41,7 +41,7 @@ converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref
 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
-coil-compose = { module = "io.coil-kt:coil3-compose", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
