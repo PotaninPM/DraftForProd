@@ -45,14 +45,13 @@ android {
 
 dependencies {
 
-    // ksp
-    ksp(libs.androidx.room.compiler)
-
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
     // Room
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
 
     // Coil
