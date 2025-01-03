@@ -109,7 +109,9 @@ private fun LoginScreenContent(
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
+
             Spacer(modifier = Modifier.height(16.dp))
+
             Button(
                 onClick = {
                     authViewModel.login(email, password)
