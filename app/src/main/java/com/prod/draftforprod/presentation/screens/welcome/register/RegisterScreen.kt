@@ -78,13 +78,12 @@ fun RegisterScreen(
         }
     }
 
-    RegisterScreenContent(authViewModel, rootNavController)
+    RegisterScreenContent(authViewModel)
 }
 
 @Composable
 private fun RegisterScreenContent(
-    authViewModel: AuthViewModel,
-    rootNavController: NavHostController
+    authViewModel: AuthViewModel
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
