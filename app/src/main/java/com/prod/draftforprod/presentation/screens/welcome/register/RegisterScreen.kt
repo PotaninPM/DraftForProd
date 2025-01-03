@@ -1,6 +1,7 @@
 package com.prod.draftforprod.presentation.screens.welcome.register
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -9,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -52,6 +55,29 @@ fun RegisterScreen(
     rootNavController: NavHostController,
     authViewModel: AuthViewModel = koinViewModel()
 ) {
+    val authState by authViewModel.authState.collectAsState()
+
+    when (authState) {
+        is AuthState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is AuthState.Authorized -> {
+            rootNavController.navigate("main") {
+                popUpTo("welcome") { inclusive = true }
+            }
+        }
+
+        else -> {
+            //do nothing
+        }
+    }
+
     RegisterScreenContent(authViewModel, rootNavController)
 }
 
@@ -77,11 +103,10 @@ private fun RegisterScreenContent(
     val authState by authViewModel.authState.collectAsState()
 
     val isLoading = authState is AuthState.Loading
-    val errorMessage = (authState as? AuthState.Error)?.message
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -90,10 +115,10 @@ private fun RegisterScreenContent(
                 .clickable {
                     launcher.launch("image/*")
                 }
-                .size(120.dp)
+                .size(160.dp)
                 .clip(CircleShape)
                 .border(
-                    width = 4.dp,
+                    width = 2.dp,
                     color = Color(0xFF4CAF50),
                     shape = CircleShape
                 ),
@@ -104,8 +129,9 @@ private fun RegisterScreenContent(
                     painter = rememberAsyncImagePainter(it),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(110.dp)
-                        .clip(CircleShape)
+                        .size(160.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
                 )
             } ?: run {
                 Icon(
@@ -115,6 +141,7 @@ private fun RegisterScreenContent(
                 )
             }
         }
+
         Spacer(modifier = Modifier.size(16.dp))
 
         OutlinedTextField(
@@ -150,25 +177,9 @@ private fun RegisterScreenContent(
                 Text(stringResource(R.string.sign_up))
             }
         }
-
-        errorMessage?.let {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = it,
-                color = Color.Red,
-                style = MaterialTheme.typography.headlineMedium
-            )
-        }
-    }
-
-    LaunchedEffect(authState) {
-//        if (authState is AuthState.Authorized) {
-//            rootNavController.navigate(Screen.Home.route) {
-//                popUpTo(Screen.Welcome.route) { inclusive = true }
-//            }
-//        }
     }
 }
+
 
 @Preview
 @Composable

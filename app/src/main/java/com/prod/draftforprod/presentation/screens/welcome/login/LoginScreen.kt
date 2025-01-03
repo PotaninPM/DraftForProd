@@ -1,5 +1,6 @@
 package com.prod.draftforprod.presentation.screens.welcome.login
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -64,10 +66,6 @@ fun LoginScreen(
             }
         }
 
-        is AuthState.Error -> {
-            Text("Error: ${(authState as AuthState.Error).message}")
-        }
-
         is AuthState.Authorized -> {
             rootNavController.navigate("main") {
                 popUpTo("welcome") { inclusive = true }
@@ -75,9 +73,11 @@ fun LoginScreen(
         }
 
         else -> {
-            LoginScreenContent(authViewModel)
+            //do nothing
         }
     }
+
+    LoginScreenContent(authViewModel)
 }
 
 @Composable
@@ -100,6 +100,7 @@ private fun LoginScreenContent(
                 label = { Text(stringResource(R.string.email)) },
                 modifier = Modifier.fillMaxWidth()
             )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
