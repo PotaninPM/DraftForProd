@@ -11,11 +11,11 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 val appModule = listOf(
+    viewModelModule,
     networkModule,
     repositoryModule,
     useCaseModule,
     roomModule,
-    viewModelModule,
     commonModule
 )
 

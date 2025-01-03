@@ -1,5 +1,6 @@
 package com.prod.draftforprod.common.di
 
+import com.prod.draftforprod.data.remote.api.AuthApi
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,5 +14,5 @@ val networkModule = module {
             .build()
     }
 
-    //single { get<Retrofit>().create(*Api::class.java) }
+    single { get<Retrofit>().create(AuthApi::class.java) }
 }
