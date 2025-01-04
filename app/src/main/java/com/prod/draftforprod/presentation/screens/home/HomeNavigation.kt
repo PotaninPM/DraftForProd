@@ -4,11 +4,12 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,7 +31,7 @@ fun HomeNavigation(rootNavController: NavHostController) {
                     BottomNavItem(
                         route = HomeNavDestinations.Main,
                         labelRes = R.string.main,
-                        selectedIcon = Icons.Filled.Favorite,
+                        selectedIcon = ImageVector.vectorResource(id = R.drawable.favorite_filled_24px),
                         unselectedIcon = Icons.Outlined.FavoriteBorder
                     )
                 )
