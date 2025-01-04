@@ -21,7 +21,7 @@ class AuthViewModel(
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-            _authState.value = AuthState.Authorized
+
             try {
                 val success = loginUseCase(email, password)
                 _authState.value = if (success) AuthState.Authorized else AuthState.Unauthorized
