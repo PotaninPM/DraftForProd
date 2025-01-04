@@ -47,6 +47,7 @@ import androidx.navigation.NavHostController
 import coil3.compose.rememberAsyncImagePainter
 import com.prod.draftforprod.R
 import com.prod.draftforprod.domain.state.AuthState
+import com.prod.draftforprod.presentation.screens.RootNavDestinations
 import com.prod.draftforprod.presentation.viewModels.AuthViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -68,38 +69,43 @@ fun RegisterScreen(
         }
 
         is AuthState.Authorized -> {
-            rootNavController.navigate("main") {
-                popUpTo("welcome") { inclusive = true }
+            rootNavController.navigate(RootNavDestinations.Home) {
+                popUpTo(RootNavDestinations.Welcome) { inclusive = true }
             }
         }
 
         else -> {
-            //do nothing
+            var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.GetContent(),
+                onResult = { uri: Uri? ->
+                    avatarUri = uri
+                }
+            )
+
+            val authState by authViewModel.authState.collectAsState()
+
+            RegisterScreenContent(
+                authState = authState,
+                avatarUri = avatarUri,
+                onImageClick = {
+                    launcher.launch("image/*")
+                }
+            )
         }
     }
-
-    RegisterScreenContent(authViewModel)
 }
 
 @Composable
 private fun RegisterScreenContent(
-    authViewModel: AuthViewModel
+    authState: AuthState,
+    avatarUri: Uri? = null,
+    onImageClick: () -> Unit = {},
+    onRegisterClick: (email: String, password: String) -> Unit = { _, _ -> }
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-
-    var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
-
-    val context = LocalContext.current
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? ->
-            avatarUri = uri
-        }
-    )
-
-    val authState by authViewModel.authState.collectAsState()
 
     val isLoading = authState is AuthState.Loading
 
@@ -111,11 +117,9 @@ private fun RegisterScreenContent(
     ) {
         Box(
             modifier = Modifier
-                .clickable {
-                    launcher.launch("image/*")
-                }
                 .size(160.dp)
                 .clip(CircleShape)
+                .clickable(onClick = onImageClick)
                 .border(
                     width = 2.dp,
                     color = Color(0xFF4CAF50),
@@ -161,9 +165,7 @@ private fun RegisterScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-                authViewModel.register(email, password)
-            },
+            onClick = { onRegisterClick(email, password) },
             modifier = Modifier.fillMaxWidth(),
             enabled = !isLoading
         ) {

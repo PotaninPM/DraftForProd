@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.prod.draftforprod.R
 import com.prod.draftforprod.domain.state.AuthState
+import com.prod.draftforprod.presentation.screens.RootNavDestinations
 import com.prod.draftforprod.presentation.viewModels.AuthViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -50,18 +51,16 @@ fun LoginScreen(
             }
         }
 
-        is AuthState.Authorized -> {
-            rootNavController.navigate("main") {
-                popUpTo("welcome") { inclusive = true }
+        AuthState.Authorized -> {
+            rootNavController.navigate(RootNavDestinations.Home) {
+                popUpTo(RootNavDestinations.Welcome) { inclusive = true }
             }
         }
 
         else -> {
-            //do nothing
+            LoginScreenContent(authViewModel)
         }
     }
-
-    LoginScreenContent(authViewModel)
 }
 
 @Composable
