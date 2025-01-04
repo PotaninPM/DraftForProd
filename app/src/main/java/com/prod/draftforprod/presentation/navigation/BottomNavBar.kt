@@ -1,5 +1,6 @@
 package com.prod.draftforprod.presentation.navigation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -39,7 +40,7 @@ fun BottomNavBar(
                     }
                 },
                 icon = {
-                    Icon(
+                    Image(
                         imageVector = if (isSelected) destination.selectedIcon else destination.unselectedIcon,
                         contentDescription = stringResource(id = destination.labelRes)
                     )
