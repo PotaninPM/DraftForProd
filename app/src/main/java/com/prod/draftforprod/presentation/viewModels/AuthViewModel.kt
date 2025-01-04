@@ -24,7 +24,7 @@ class AuthViewModel(
 
             try {
                 val success = loginUseCase(email, password)
-                _authState.value = if (success) AuthState.Authorized else AuthState.Unauthorized
+                _authState.value = if (success) AuthState.Authorized else AuthState.Error("Error")
             } catch (e: Exception) {
                 _authState.value = AuthState.Error(e.message ?: "Error")
             }
@@ -37,7 +37,7 @@ class AuthViewModel(
 
             try {
                 val success = registerUseCase(email, password)
-                _authState.value = if (success) AuthState.Authorized else AuthState.Unauthorized
+                _authState.value = if (success) AuthState.Authorized else AuthState.Error("Error")
             } catch (e: Exception) {
                 _authState.value = AuthState.Error(e.message ?: "Error")
             }

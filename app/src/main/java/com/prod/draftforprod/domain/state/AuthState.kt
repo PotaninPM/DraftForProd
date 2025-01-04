@@ -5,5 +5,4 @@ sealed class AuthState {
     object Authorized : AuthState()
     object Unauthorized : AuthState()
     data class Error(val message: String) : AuthState()
-
 }

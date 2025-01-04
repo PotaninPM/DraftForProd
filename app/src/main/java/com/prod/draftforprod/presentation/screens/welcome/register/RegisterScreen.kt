@@ -1,6 +1,7 @@
 package com.prod.draftforprod.presentation.screens.welcome.register
 
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,9 +19,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -37,10 +40,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -58,6 +64,7 @@ fun RegisterScreen(
 ) {
     val authState by authViewModel.authState.collectAsState()
     var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+
 
     when (authState) {
         is AuthState.Loading -> {
@@ -89,11 +96,8 @@ fun RegisterScreen(
                 onImageClick = {
                     launcher.launch("image/*")
                 },
-                onRegisterClick = {
-                    email, password -> authViewModel.register(
-                        email = email,
-                        password = password
-                    )
+                onRegisterClick = { email, password ->
+                    authViewModel.register(email = email, password = password)
                 }
             )
         }
@@ -107,10 +111,24 @@ private fun RegisterScreenContent(
     onImageClick: () -> Unit = {},
     onRegisterClick: (email: String, password: String) -> Unit = { _, _ -> }
 ) {
+    val context = LocalContext.current
+
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var emailError by rememberSaveable { mutableStateOf<String?>(null) }
+    var passwordError by rememberSaveable { mutableStateOf<String?>(null) }
 
     val isLoading = authState is AuthState.Loading
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Error) {
+            emailError = "Invalid email"
+            passwordError = context.getString(R.string.smth_went_wrong)
+        }
+    }
+
+    val isButtonEnabled = email.isNotEmpty() && password.isNotEmpty() && emailError == null && passwordError == null
 
     Column(
         modifier = Modifier
@@ -152,17 +170,47 @@ private fun RegisterScreenContent(
 
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it
+                emailError = when {
+                    it.isEmpty() -> "рmail cannot be empty"
+                    !it.contains("@") -> "invalid email"
+                    else -> null
+                }
+            },
             label = { Text(stringResource(R.string.email)) },
+            isError = emailError != null,
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = {
+                password = it
+                passwordError = when {
+                    it.isEmpty() -> context.getString(R.string.password_cannot_be_empty)
+                    it.length < 4 -> context.getString(R.string.password_must_be_at_least_4_characters)
+                    else -> null
+                }
+            },
+            singleLine = true,
             label = { Text(stringResource(R.string.password)) },
-            visualTransformation = PasswordVisualTransformation(),
+            isError = passwordError != null,
+            supportingText = {
+                if (passwordError != null) {
+                    Text(text = passwordError!!)
+                }
+            },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (passwordVisible) R.drawable.visibility_24px else R.drawable.visibility_off_24px
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = ImageVector.vectorResource(image), contentDescription = null)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -171,7 +219,7 @@ private fun RegisterScreenContent(
         Button(
             onClick = { onRegisterClick(email, password) },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            enabled = isButtonEnabled && !isLoading
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
@@ -184,7 +232,6 @@ private fun RegisterScreenContent(
         }
     }
 }
-
 
 @Preview
 @Composable
