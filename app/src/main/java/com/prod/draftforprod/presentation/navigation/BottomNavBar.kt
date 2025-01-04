@@ -1,6 +1,9 @@
 package com.prod.draftforprod.presentation.navigation
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -21,7 +24,7 @@ fun BottomNavBar(
     destinations: List<BottomNavItem<*>>
 ) {
     NavigationBar(
-        modifier = Modifier.height(70.dp)
+        modifier = Modifier.height(70.dp + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
