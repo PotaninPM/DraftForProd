@@ -3,6 +3,9 @@ package com.prod.draftforprod.presentation.screens.home
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,7 +13,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.prod.draftforprod.R
 import com.prod.draftforprod.presentation.navigation.BottomNavBar
+import com.prod.draftforprod.presentation.navigation.BottomNavItem
 import com.prod.draftforprod.presentation.screens.home.main.MainScreen
 
 @Composable
@@ -22,7 +27,12 @@ fun HomeNavigation(rootNavController: NavHostController) {
             BottomNavBar(
                 navController = homeNavController,
                 destinations = listOf(
-                    // . . .
+                    BottomNavItem(
+                        route = HomeNavDestinations.Main,
+                        labelRes = R.string.main,
+                        selectedIcon = Icons.Filled.Favorite,
+                        unselectedIcon = Icons.Outlined.FavoriteBorder
+                    )
                 )
             )
         }
