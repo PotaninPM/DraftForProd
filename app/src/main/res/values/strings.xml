@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">DraftForProd</string>
     <string name="main">Главная</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>
