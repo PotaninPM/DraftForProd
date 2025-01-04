@@ -1,14 +1,15 @@
-package com.prod.draftforprod.presentation.screens.welcome.welcome
+package com.prod.draftforprod.presentation.screens.welcome
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -31,13 +32,13 @@ import com.prod.draftforprod.presentation.screens.welcome.register.RegisterScree
 import kotlinx.coroutines.launch
 
 @Composable
-fun WelcomeScreen(welcomeNavController: NavHostController) {
-    WelcomeScreenContent(welcomeNavController)
+fun WelcomeScreen(rootNavController: NavHostController) {
+    WelcomeScreenContent(rootNavController)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun WelcomeScreenContent(welcomeNavController: NavHostController) {
+private fun WelcomeScreenContent(rootNavController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf(R.string.sign_in, R.string.sign_up)
@@ -58,30 +59,33 @@ private fun WelcomeScreenContent(welcomeNavController: NavHostController) {
             // пока так
         }
     ) { innerPadding ->
-        Column(
+        Surface(
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(innerPadding)
         ) {
-            TabRow(selectedTabIndex = selectedTab) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTab == index,
-                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
-                        text = { Text(text = stringResource(title)) }
-                    )
+            Column {
+                TabRow(selectedTabIndex = selectedTab) {
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTab == index,
+                            onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+                            text = { Text(text = stringResource(title)) }
+                        )
+                    }
                 }
-            }
 
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-            ) { page ->
-                when (page) {
-                    0 -> LoginScreen(welcomeNavController)
-                    1 -> RegisterScreen(welcomeNavController)
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                ) { page ->
+                    when (page) {
+                        0 -> LoginScreen(rootNavController)
+                        1 -> RegisterScreen(rootNavController)
+                    }
                 }
             }
         }
