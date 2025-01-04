@@ -1,12 +1,10 @@
 package com.prod.draftforprod.data.repository
 
 import android.content.SharedPreferences
-import com.prod.draftforprod.data.mappers.toDomainUser
 import com.prod.draftforprod.data.remote.api.AuthApi
 import com.prod.draftforprod.data.remote.dto.auth.AuthResponse
 import com.prod.draftforprod.data.remote.dto.auth.LoginRequestDto
 import com.prod.draftforprod.data.remote.dto.auth.RegisterRequestDto
-import com.prod.draftforprod.domain.model.UserProfile
 import com.prod.draftforprod.domain.repository.AuthRepository
 
 class AuthRepositoryImpl(
@@ -28,7 +26,7 @@ class AuthRepositoryImpl(
         return true
     }
 
-    private fun saveToken(token: String) {
+    override fun saveToken(token: String) {
         prefs.edit().putString("jwt_token", token).apply()
     }
 

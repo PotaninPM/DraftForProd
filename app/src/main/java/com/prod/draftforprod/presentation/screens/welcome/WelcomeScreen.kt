@@ -27,16 +27,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.prod.draftforprod.R
+import com.prod.draftforprod.domain.repository.AuthRepository
+import com.prod.draftforprod.presentation.screens.RootNavDestinations
 import com.prod.draftforprod.presentation.screens.welcome.login.LoginScreen
 import com.prod.draftforprod.presentation.screens.welcome.register.RegisterScreen
+import com.prod.draftforprod.presentation.viewModels.AuthViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.getKoin
 
 @Composable
-fun WelcomeScreen(rootNavController: NavHostController) {
+fun WelcomeScreen(
+    rootNavController: NavHostController,
+    authRepository: AuthRepository = getKoin().get()
+) {
+    if (authRepository.getToken() != null) {
+        rootNavController.navigate(RootNavDestinations.Home) {
+            popUpTo(RootNavDestinations.Welcome) { inclusive = true }
+        }
+    }
+
     WelcomeScreenContent(rootNavController)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WelcomeScreenContent(rootNavController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
@@ -47,12 +60,6 @@ private fun WelcomeScreenContent(rootNavController: NavHostController) {
     LaunchedEffect(pagerState.currentPage) {
         selectedTab = pagerState.currentPage
     }
-
-//    if (viewModel.getUserId() != null) {
-//        navController.navigate(Screen.Events.route) {
-//            popUpTo(Screen.Welcome.route) { inclusive = true }
-//        }
-//    }
 
     Scaffold(
         topBar = {

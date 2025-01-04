@@ -15,7 +15,7 @@ class AuthViewModel(
     private val registerUseCase: RegisterUseCase,
     private val logoutUseCase: LogoutUseCase
 ): ViewModel() {
-    val _authState = MutableStateFlow<AuthState>(AuthState.Unauthorized)
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthorized)
     val authState: StateFlow<AuthState> = _authState
 
     fun login(email: String, password: String) {
@@ -33,6 +33,7 @@ class AuthViewModel(
     fun register(email: String, password: String) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
+
             try {
                 val success = registerUseCase(email, password)
                 _authState.value = if (success) AuthState.Authorized else AuthState.Unauthorized
@@ -41,6 +42,8 @@ class AuthViewModel(
             }
         }
     }
+
+
 
     fun logout() {
         logoutUseCase()

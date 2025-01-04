@@ -20,9 +20,7 @@ fun BottomNavBar(
     navController: NavHostController,
     destinations: List<BottomNavItem<*>>
 ) {
-    NavigationBar(
-        modifier = Modifier.height(70.dp)
-    ) {
+    NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
@@ -42,7 +40,7 @@ fun BottomNavBar(
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(if (isSelected) destination.selectedIconRes else destination.unselectedIconRes),
+                        imageVector = if (isSelected) destination.selectedIcon else destination.unselectedIcon,
                         contentDescription = stringResource(id = destination.labelRes)
                     )
                 },
