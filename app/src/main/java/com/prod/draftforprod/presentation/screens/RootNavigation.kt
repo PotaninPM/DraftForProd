@@ -15,7 +15,7 @@ fun RootNavigation() {
 
     NavHost(
         navController = rootNavController,
-        startDestination = RootNavDestinations.Welcome /* или RootNavDestinations.Home если авторизован */,
+        startDestination = RootNavDestinations.Welcome,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },

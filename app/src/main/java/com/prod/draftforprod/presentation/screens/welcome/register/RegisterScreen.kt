@@ -57,6 +57,7 @@ fun RegisterScreen(
     authViewModel: AuthViewModel = koinViewModel()
 ) {
     val authState by authViewModel.authState.collectAsState()
+    var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
 
     when (authState) {
         is AuthState.Loading -> {
@@ -75,8 +76,6 @@ fun RegisterScreen(
         }
 
         else -> {
-            var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
-
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.GetContent(),
                 onResult = { uri: Uri? ->
@@ -84,13 +83,17 @@ fun RegisterScreen(
                 }
             )
 
-            val authState by authViewModel.authState.collectAsState()
-
             RegisterScreenContent(
                 authState = authState,
                 avatarUri = avatarUri,
                 onImageClick = {
                     launcher.launch("image/*")
+                },
+                onRegisterClick = {
+                    email, password -> authViewModel.register(
+                        email = email,
+                        password = password
+                    )
                 }
             )
         }
@@ -162,6 +165,7 @@ private fun RegisterScreenContent(
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(

@@ -32,11 +32,6 @@ class AuthRepositoryImpl(
         prefs.edit().putString("jwt_token", token).apply()
     }
 
-    override suspend fun getProfile(): UserProfile {
-        val profileDto = api.getProfile()
-        return profileDto.toDomainUser()
-    }
-
     override fun getToken(): String? {
         return prefs.getString("jwt_token", null)
     }
