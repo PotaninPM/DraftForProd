@@ -10,4 +10,17 @@
     <string name="password_cannot_be_empty">Password cannot be empty</string>
     <string name="invalid_data">Invalid data.</string>
     <string name="smth_went_wrong">Something went wrong. Please try again later.</string>
+    <string name="settings__lang_ru">Русский</string>
+    <string name="settings__lang_en">Английский</string>
+    <string name="settings__lang_system">Системный</string>
+    <string name="settings__theme_dark">Тёмная</string>
+    <string name="settings__theme_light">Светлая</string>
+    <string name="settings__theme_system">Системная</string>
+    <string name="loading">Загрузка</string>
+    <string name="settings__title_theme">Тема</string>
+    <string name="settings__title_lang">Язык</string>
+    <string name="settings__tilte_dc">Динамические цвета</string>
+    <string name="settings__block_general">Основные</string>
+    <string name="settings__block_appearance">Оформление</string>
+    <string name="settings__title">Настройки</string>
 </resources>

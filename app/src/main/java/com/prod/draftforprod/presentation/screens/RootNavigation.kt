@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.prod.draftforprod.presentation.screens.home.HomeNavigation
+import com.prod.draftforprod.presentation.screens.settings.SettingsScreen
 import com.prod.draftforprod.presentation.screens.welcome.WelcomeScreen
 
 @Composable
@@ -15,7 +16,7 @@ fun RootNavigation() {
 
     NavHost(
         navController = rootNavController,
-        startDestination = RootNavDestinations.Welcome,
+        startDestination = RootNavDestinations.Settings,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
@@ -30,6 +31,12 @@ fun RootNavigation() {
 
         composable<RootNavDestinations.Welcome> {
             WelcomeScreen(
+                rootNavController = rootNavController
+            )
+        }
+
+        composable<RootNavDestinations.Settings> {
+            SettingsScreen(
                 rootNavController = rootNavController
             )
         }
