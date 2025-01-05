@@ -9,4 +9,7 @@ sealed class RootNavDestinations {
 
     @Serializable
     object Home : RootNavDestinations()
+
+    @Serializable
+    object Settings : RootNavDestinations()
 }
